@@ -2,14 +2,14 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   title: {
-    fontSize: 32,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#FFFFFF',
   },
 
   subtitle: {
     marginTop: 8,
-    fontSize: 16,
+    fontSize: 14,
     color: '#C4C4C4',
   },
 

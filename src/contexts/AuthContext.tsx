@@ -1,48 +1,38 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { saveUser, getUser, removeUser } from '../services/storage';
+import { getToken, saveToken, removeToken } from '../services/storage';
 
-interface AuthContextData {
-  user: any;
-  loading: boolean;
-  signIn: (userData: any) => Promise<void>;
+type AuthContextData = {
+  signed: boolean;
+  signIn: (token: string) => Promise<void>;
   signOut: () => Promise<void>;
-}
+};
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+export function AuthProvider({ children }: any) {
+  const [signed, setSigned] = useState(false);
 
-  useEffect(() => {
-    async function loadUser() {
-      const storedUser = await getUser();
-      setUser(storedUser);
-      setLoading(false);
-    }
-
-    loadUser();
-  }, []);
-
-  async function signIn(userData: any) {
-    setUser(userData);
-    await saveUser(userData);
+  async function signIn(token: string) {
+    await saveToken(token);
+    setSigned(true);
   }
 
   async function signOut() {
-    setUser(null);
-    await removeUser();
+    await removeToken();
+    setSigned(false);
   }
 
+  async function loadStorage() {
+    const token = await getToken();
+    if (token) setSigned(true);
+  }
+
+  useEffect(() => {
+    loadStorage();
+  }, []);
+
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        signIn,
-        signOut,
-      }}
-    >
+    <AuthContext.Provider value={{ signed, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );

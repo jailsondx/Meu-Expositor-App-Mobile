@@ -11,10 +11,12 @@ export default function Home() {
 
   return (
     <SafeAreaView style={GlobalStyles.container}>
-      <Text style={styles.title}>Home</Text>
-      <TouchableOpacity onPress={signOut}>
-        <Text style={styles.subtitle}>Sair</Text>
-      </TouchableOpacity>
+      <View style={GlobalStyles.header}>
+        <Text style={styles.title}>Inicio</Text>
+        <TouchableOpacity onPress={signOut}>
+          <Text style={styles.subtitle}>Sair/Logout</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }

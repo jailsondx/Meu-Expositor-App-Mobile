@@ -22,6 +22,11 @@ export default StyleSheet.create({
     padding: 24,
   },
 
+    header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  
   title: {
     fontSize: 32,
     fontWeight: 'bold',
@@ -65,4 +70,15 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+
+
+
+  //MODAL
+  modalOverlay: {
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.6)',
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+
 });

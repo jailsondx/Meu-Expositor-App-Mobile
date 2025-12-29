@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/AuthContext';
 
 import styles from './styles';
 import GlobalStyles from '../../GlobalStyles';
 import { api } from '../../services/api';
-import { saveUser } from '../../services/storage';
 
 export default function Login() {
   const { signIn } = useAuth();
-  const navigation = useNavigation<any>();
 
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -31,19 +28,20 @@ export default function Login() {
         senha,
       });
 
-      // backend retorna: { message, user }
-      const { user } = response.data;
+      // padrão novo
+      const token = response.data.data.token;
 
-      await signIn(user);
+      Alert.alert(
+        'Token',
+        token
+      );
 
-      // salva no storage
-      await saveUser(user);
-
+      await signIn(token);
 
     } catch (error: any) {
       Alert.alert(
         'Erro',
-        error.response?.data?.error || 'Email ou senha inválidos'
+        error.response?.data?.message || 'Email ou senha inválidos'
       );
     } finally {
       setLoading(false);
