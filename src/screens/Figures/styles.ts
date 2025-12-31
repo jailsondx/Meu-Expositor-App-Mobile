@@ -16,7 +16,7 @@ export default StyleSheet.create({
   flatList: {
     width: '100%',
   },
-  
+
   card: {
     flexDirection: 'row',
     backgroundColor: '#FFF',
@@ -45,11 +45,11 @@ export default StyleSheet.create({
   },
 
   image: {
-  width: '100%',
-  height: '100%',
-  borderTopLeftRadius: 12,
-  borderBottomLeftRadius: 12,
-},
+    width: '100%',
+    height: '100%',
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
+  },
 
 
   info: {
@@ -96,53 +96,76 @@ export default StyleSheet.create({
 
 
   //MODAL
-modalCard: {
-  width: '90%',
-  height: '70%',
-  backgroundColor: '#fff',
-  borderRadius: 16,
-  padding: 16,
-},
+  collectionItem: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#003566',
+    color: 'whitesmoke',
+    height: 40,
+    fontSize: 26,
+    borderRadius: 12,
+    marginBottom: 16,
+    elevation: 4, // Android
+    shadowColor: '#000', // iOS
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+  },
 
-modalImage: {
-  width: '100%',
-  height: '40%',
-  boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-  borderRadius: 12,
-  marginBottom: 12,
-},
+    collectionItemText: {
+    color: 'whitesmoke',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 
-modalName: {
-  fontSize: 20,
-  fontWeight: 'bold',
-},
+  modalCard: {
+    width: '90%',
+    height: '75%',
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+  },
 
-modalLine: {
-  fontSize: 16,
-  color: '#666',
-},
+  modalImage: {
+    width: '100%',
+    height: '40%',
+    boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+    borderRadius: 12,
+    marginBottom: 12,
+  },
 
-modalBrand: {
-  fontSize: 16,
-  marginBottom: 8,
-  color: '#666'
-},
+  modalName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
 
-modalPrice: {
-  fontSize: 18,
-  fontWeight: 'bold',
-  marginVertical: 8,
-},
+  modalLine: {
+    fontSize: 16,
+    color: '#666',
+  },
 
-modalYear: {
-  fontSize: 14,
-  color: '#666',
-  marginBottom: 16,
-},
+  modalBrand: {
+    fontSize: 16,
+    marginBottom: 8,
+    color: '#666'
+  },
 
-modalClose: {
-  textAlign: 'center',
-  marginTop: 12,
-  color: '#999',
-},
+  modalPrice: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 8,
+  },
+
+  modalYear: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 16,
+  },
+
+  modalClose: {
+    textAlign: 'center',
+    marginTop: 12,
+    color: '#999',
+  },
 });

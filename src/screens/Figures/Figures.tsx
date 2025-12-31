@@ -15,6 +15,12 @@ export default function Figures({ navigation }: any) {
   const [selectedFigure, setSelectedFigure] = useState<any | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
 
+  //STATES DAS FIGURES EM RELAÇÃO A COLEÇÃO
+  const [collections, setCollections] = useState<any[]>([]);
+  const [isInCollection, setIsInCollection] = useState(false);
+  const [collectionPickerVisible, setCollectionPickerVisible] = useState(false);
+
+
   useEffect(() => {
     loadAll();
   }, []);
@@ -28,9 +34,35 @@ export default function Figures({ navigation }: any) {
     }
   }
 
-  function openFigure(figure: any) {
+  async function openCollectionPicker() {
+    const response = await api.get('/collection/loadCollections');
+    setCollections(response.data.data);
+    setCollectionPickerVisible(true);
+  }
+
+  async function addToCollection(collectionId: number) {
+    await api.post(`/collection/${collectionId}/add-figure`, {
+      figureId: selectedFigure.id,
+    });
+
+    setCollectionPickerVisible(false);
+    setIsInCollection(true);
+  }
+
+  async function removeFigure() {
+    await api.delete(`/collection/remove-figure/${selectedFigure.id}`);
+    setIsInCollection(false);
+  }
+
+
+  async function openFigure(figure: any) {
     setSelectedFigure(figure);
     setModalVisible(true);
+    const response = await api.get(`/collection/figure-status`, {
+        params: { figureId: figure.id },
+      });
+
+    setIsInCollection(response.data.data.length > 0);
   }
 
   function closeModal() {
@@ -78,15 +110,6 @@ export default function Figures({ navigation }: any) {
               <View style={styles.footer}>
                 <Text style={styles.year}>{item.release_year}</Text>
               </View>
-
-              {/*
-              <View style={styles.footer}>
-                <Text style={styles.price}>
-                  {(item.price / 1000).toFixed(3)} {item.coin}
-                </Text>
-                <Text style={styles.year}>{item.release_year}</Text>
-              </View>
-            */}
             </View>
 
           </TouchableOpacity>
@@ -123,16 +146,23 @@ export default function Figures({ navigation }: any) {
                 </Text>
 
                 <TouchableOpacity
-                  style={GlobalStyles.buttonPrimary}
+                  style={[
+                    GlobalStyles.buttonPrimary,
+                    isInCollection && { backgroundColor: '#c0392b' },
+                  ]}
                   onPress={() => {
-                    // futuramente: add à coleção
-                    console.log('Adicionar à coleção', selectedFigure.id);
+                    if (isInCollection) {
+                      removeFigure();
+                    } else {
+                      openCollectionPicker();
+                    }
                   }}
                 >
                   <Text style={GlobalStyles.buttonPrimaryText}>
-                    Adicionar à Coleção
+                    {isInCollection ? 'Remover da Coleção' : 'Adicionar à Coleção'}
                   </Text>
                 </TouchableOpacity>
+
 
                 <TouchableOpacity onPress={closeModal}>
                   <Text style={styles.modalClose}>Fechar</Text>
@@ -142,6 +172,38 @@ export default function Figures({ navigation }: any) {
           </View>
         </View>
       </Modal>
+
+
+      <Modal visible={collectionPickerVisible} transparent animationType="fade">
+        <View style={GlobalStyles.modalOverlay}>
+          <View style={GlobalStyles.modalCardAuto}>
+            <View style={GlobalStyles.cardModalTitle}>
+              <Text style={GlobalStyles.modalTitle}>Escolha uma coleção</Text>
+            </View>
+
+
+            <View style={GlobalStyles.modalContent}>
+              <FlatList
+                data={collections}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.collectionItem}
+                    onPress={() => addToCollection(item.id)}
+                  >
+                    <Text style={styles.collectionItemText}>{item.name}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+              <TouchableOpacity onPress={() => setCollectionPickerVisible(false)}>
+                <Text style={styles.modalClose}>Cancelar</Text>
+              </TouchableOpacity>
+            </View>
+
+          </View>
+        </View>
+      </Modal>
+
 
 
     </SafeAreaView>

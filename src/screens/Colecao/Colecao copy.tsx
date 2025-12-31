@@ -2,17 +2,16 @@ import { View, Text, TouchableOpacity, FlatList, Modal, TextInput, Alert } from 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
 import { api } from '../../services/api';
-import { useNavigation } from '@react-navigation/native';
 
-// Styles
+//Styles
 import styles from './styles';
 import GlobalStyles from '../../GlobalStyles';
 
 export default function Colecao() {
-  const navigation = useNavigation<any>();
   const [collections, setCollections] = useState<any[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState('');
+
 
   useEffect(() => {
     loadCollections();
@@ -23,6 +22,7 @@ export default function Colecao() {
     setCollections(response.data.data);
   }
 
+
   async function createCollection() {
     await api.post('/collection/createCollection', {
       name,
@@ -31,11 +31,6 @@ export default function Colecao() {
     setName('');
     setModalVisible(false);
     loadCollections();
-  }
-
-  // 3. Função para navegar para a tela de detalhes
-  function navigateToCollectionDetail(collectionId: any) {
-    navigation.navigate('CollectionDetail', { collectionId });
   }
 
   return (
@@ -49,19 +44,10 @@ export default function Colecao() {
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ padding: 16 }}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.card}
-            onPress={() =>
-              navigation.navigate('ItensColecao', {
-                collectionName: item.name,
-                collectionId: item.id,
-              })
-            }
-          >
+          <View style={styles.card}>
             <Text style={styles.cardTitle}>{item.name}</Text>
-          </TouchableOpacity>
+          </View>
         )}
-
       />
 
       <TouchableOpacity

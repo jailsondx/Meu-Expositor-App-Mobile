@@ -1,10 +1,21 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
+
   container: {
-    flexDirection: 'row',
-    margin: 16,
+    flexDirection: 'column',
+    marginTop: 16,
+    marginBottom: 16,
     gap: 8,
+  },
+
+  containerInput: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+
+  text: {
+    color: 'whitesmoke',
   },
 
   input: {

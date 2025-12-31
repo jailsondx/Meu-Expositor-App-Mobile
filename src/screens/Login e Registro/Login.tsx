@@ -30,12 +30,7 @@ export default function Login() {
 
       // padrão novo
       const token = response.data.data.token;
-
-      Alert.alert(
-        'Token',
-        token
-      );
-
+      
       await signIn(token);
 
     } catch (error: any) {

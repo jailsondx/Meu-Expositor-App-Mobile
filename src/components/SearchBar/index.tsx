@@ -5,10 +5,11 @@ import styles from './styles';
 
 interface SearchBarProps {
   url: string;
+  collectionId?: number;
   onResults: (data: any[]) => void;
 }
 
-export function SearchBar({ url, onResults }: SearchBarProps) {
+export function SearchBar({ url, collectionId, onResults }: SearchBarProps) {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -16,8 +17,9 @@ export function SearchBar({ url, onResults }: SearchBarProps) {
     try {
       setLoading(true);
 
-      const response = await api.get(url, {
-        params: { search: query },
+      const response = await api.post(url, {
+        search: query,
+        collectionId,
       });
 
       onResults(response.data.data);
@@ -30,18 +32,21 @@ export function SearchBar({ url, onResults }: SearchBarProps) {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        placeholder="Pesquisar..."
-        value={query}
-        onChangeText={setQuery}
-        style={styles.input}
-      />
+      <View style={styles.containerInput}>
+        <TextInput
+          placeholder="Pesquisar por nome da figure"
+          value={query}
+          onChangeText={setQuery}
+          style={styles.input}
+        />
 
-      <TouchableOpacity style={styles.button} onPress={handleSearch}>
-        <Text style={styles.buttonText}>
-          {loading ? '...' : 'Buscar'}
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleSearch}>
+          <Text style={styles.buttonText}>
+            {loading ? '...' : 'Buscar'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
     </View>
   );
 }
