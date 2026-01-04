@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 
 
 import styles from './styles';
-import GlobalStyles from '../../GlobalStyles';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 export default function Home() {
   const { signOut } = useAuth();

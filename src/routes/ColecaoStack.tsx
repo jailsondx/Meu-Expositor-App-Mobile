@@ -16,7 +16,7 @@ export default function ColecaoStack() {
       <Stack.Screen
         name="ItensColecao"
         component={itensColecao}
-        options={{ title: 'Itens da Coleção' }}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

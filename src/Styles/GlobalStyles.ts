@@ -46,10 +46,20 @@ export default StyleSheet.create({
   },
 
   buttons: {
-    marginBottom: 40,
+    justifyContent: 'space-between',
   },
 
   buttonPrimary: {
+    width: '100%',
+    backgroundColor: '#003566',
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+
+  modalButtonPrimary: {
+    width: '40%',
     backgroundColor: '#003566',
     paddingVertical: 14,
     borderRadius: 8,
@@ -58,6 +68,16 @@ export default StyleSheet.create({
   },
 
   buttonRemove: {
+    width: '100%',
+    backgroundColor: '#c0392b',
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+
+  modalButtonRemove: {
+    width: '40%',
     backgroundColor: '#c0392b',
     paddingVertical: 14,
     borderRadius: 8,
@@ -68,6 +88,12 @@ export default StyleSheet.create({
   buttonPrimaryText: {
     color: '#FFFFFF',
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+
+  buttonTextSmall: {
+    color: '#FFFFFF',
+    fontSize: 12,
     fontWeight: 'bold',
   },
 
@@ -95,9 +121,9 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
 
-  modalCardAuto: {
+  modalCardMinor: {
     width: '80%',
-    height: 'auto',
+    height: '40%',
     backgroundColor: '#001d3d',
     borderRadius: 16,
   },
@@ -144,7 +170,17 @@ export default StyleSheet.create({
   },
 
   modalContent: {
-    padding: 16
+    justifyContent: 'space-between',
+    padding: 16,
+  },
+
+  modalButtons: {
+    flexDirection: 'row',
+    height: '100%',
+    width: '100%',
+    gap: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
 });

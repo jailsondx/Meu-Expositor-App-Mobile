@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../contexts/AuthContext';
 
 import styles from './styles';
-import GlobalStyles from '../../GlobalStyles';
+import GlobalStyles from '../../Styles/GlobalStyles';
 import { api } from '../../services/api';
 
-export default function Login() {
+export default function Login({ navigation }: any) {
   const { signIn } = useAuth();
 
   const [email, setEmail] = useState('');
@@ -30,7 +31,7 @@ export default function Login() {
 
       // padrão novo
       const token = response.data.data.token;
-      
+
       await signIn(token);
 
     } catch (error: any) {
@@ -81,6 +82,21 @@ export default function Login() {
               {loading ? 'Entrando...' : 'Entrar'}
             </Text>
           </TouchableOpacity>
+
+
+          <TouchableOpacity
+            onPress={() =>
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: 'Welcome' }],
+                })
+              )
+            }
+          >
+            <Text style={GlobalStyles.subtitle}>Cancelar</Text>
+          </TouchableOpacity>
+
         </View>
       </View>
     </SafeAreaView>

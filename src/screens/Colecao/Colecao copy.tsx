@@ -5,7 +5,7 @@ import { api } from '../../services/api';
 
 //Styles
 import styles from './styles';
-import GlobalStyles from '../../GlobalStyles';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 export default function Colecao() {
   const [collections, setCollections] = useState<any[]>([]);
@@ -18,13 +18,13 @@ export default function Colecao() {
   }, []);
 
   async function loadCollections() {
-    const response = await api.get('/collection/loadCollections');
+    const response = await api.get('/get/loadCollections');
     setCollections(response.data.data);
   }
 
 
   async function createCollection() {
-    await api.post('/collection/createCollection', {
+    await api.post('/post/createCollection', {
       name,
     });
 

@@ -1,11 +1,12 @@
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { api } from '../../services/api';
 
 import styles from './styles';
-import GlobalStyles from '../../GlobalStyles';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 
 export default function Register() {
@@ -107,6 +108,21 @@ export default function Register() {
               {loading ? 'Criando...' : 'Criar conta'}
             </Text>
           </TouchableOpacity>
+
+
+          <TouchableOpacity
+            onPress={() =>
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: 'Welcome' }],
+                })
+              )
+            }
+          >
+            <Text style={GlobalStyles.subtitle}>Cancelar</Text>
+          </TouchableOpacity>
+
         </View>
       </View>
     </SafeAreaView>

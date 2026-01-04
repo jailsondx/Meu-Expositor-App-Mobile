@@ -14,10 +14,11 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 
 type Props = {
   url: string;
-  collectionId: number;
+  urlSearch: string;
+  collectionId?: number;
 };
 
-export default function FlatList_ItemsMin({ url, collectionId }: Props) {
+export default function FlatList_ItemsLarge({ url, urlSearch, collectionId }: Props) {
   const [listFigures, setListFigures] = useState<any[]>([]);
   const [selectedFigure, setSelectedFigure] = useState<any | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -59,7 +60,7 @@ export default function FlatList_ItemsMin({ url, collectionId }: Props) {
     <SafeAreaView style={GlobalStyles.container}>
 
       <SearchBar
-        url={'/post/SearchFiguresInCollection'}
+        url={urlSearch}
         onResults={setListFigures}
         collectionId={collectionId}
       />

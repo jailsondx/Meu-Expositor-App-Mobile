@@ -1,16 +1,18 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
-import GlobalStyles from '../../GlobalStyles';
+import GlobalStyles from '../../Styles/GlobalStyles';
+import LogoStyles from '../../Styles/LogoStyles';
 
 export default function Welcome({ navigation }: any) {
   return (
     <SafeAreaView style={GlobalStyles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Meu Expositor</Text>
-        <Text style={styles.subtitle}>
-          Organize e exiba seus produtos de forma simples
-        </Text>
+      <View style={LogoStyles.viewLogo}>
+        <Image
+          source={require('../../assets/logo/LOGO-MeuExpositor.png')}
+          style={LogoStyles.imageLogo}
+          resizeMode="contain"
+        />
       </View>
 
       <View style={styles.buttons}>

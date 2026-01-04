@@ -18,10 +18,11 @@ export default StyleSheet.create({
   },
 
 
-   /* ===== LISTA ===== */
+  /* ===== LISTA ===== */
 
   card: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: '#FFFFFF',
+    color: '#222',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -29,8 +30,8 @@ export default StyleSheet.create({
 
   cardTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#FFF',
+    fontWeight: 'bold',
+    color: '#222',
   },
 
   /* ===== FAB ===== */
@@ -92,5 +93,96 @@ export default StyleSheet.create({
     textAlign: 'center',
     color: '#9CA3AF',
   },
+
+
+
+
+
+
+
+
+  flatList: {
+    width: '100%',
+  },
+
+  imageContainer: {
+    width: 90,
+    height: '100%',
+    backgroundColor: '#E5E5E5',
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  imagePlaceholder: {
+    color: '#999',
+    fontSize: 12,
+  },
+
+  image: {
+    width: '100%',
+    height: '100%',
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
+  },
+
+
+  info: {
+    flex: 1,
+    padding: 5,
+  },
+
+  name: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#222',
+  },
+
+  line: {
+    fontSize: 12,
+    color: '#555',
+    marginTop: 2,
+  },
+
+  brand: {
+    fontSize: 13,
+    color: '#555',
+    marginTop: 2,
+  },
+
+  footer: {
+    //marginTop: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  price: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2E86DE',
+  },
+
+  year: {
+    fontSize: 12,
+    color: '#999',
+  },
+
+  deleteButton: {
+    backgroundColor: '#E53935',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 50,
+    marginBottom: 12,
+    borderRadius: 10,
+  },
+
+  deleteText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+
+
 
 });

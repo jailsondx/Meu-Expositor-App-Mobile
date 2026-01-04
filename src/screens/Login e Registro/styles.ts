@@ -15,16 +15,22 @@ export default StyleSheet.create({
   },
 
   form: {
+    flexDirection: 'column',
     justifyContent: 'center',
-    height: '100%'
+    alignItems: 'center',
+    height: '100%',
+    width: '100%',
   },
 
   formInputs: {
+    alignItems: 'center',
+    width: '100%',
     gap: 16
   },
 
   input: {
     height: 40,
+    width: '80%',
     borderColor: 'gray',
     color: 'whitesmoke',
     borderWidth: 1,
@@ -50,6 +56,10 @@ export default StyleSheet.create({
   },
 
   buttons: {
-    marginTop: 40
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '80%',
+    marginTop: 40,
   }
 });

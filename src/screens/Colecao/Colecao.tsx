@@ -1,12 +1,14 @@
 import { View, Text, TouchableOpacity, FlatList, Modal, TextInput, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
+import { Swipeable } from 'react-native-gesture-handler';
 import { api } from '../../services/api';
 import { useNavigation } from '@react-navigation/native';
+import EvilIcons from '@expo/vector-icons/EvilIcons';
 
 // Styles
 import styles from './styles';
-import GlobalStyles from '../../GlobalStyles';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 export default function Colecao() {
   const navigation = useNavigation<any>();
@@ -15,28 +17,66 @@ export default function Colecao() {
   const [name, setName] = useState('');
 
   useEffect(() => {
-    loadCollections();
+    getAllCollectionsUser();
   }, []);
 
-  async function loadCollections() {
-    const response = await api.get('/collection/loadCollections');
+  async function getAllCollectionsUser() {
+    const response = await api.get('/get/getAllCollectionsUser');
     setCollections(response.data.data);
   }
 
   async function createCollection() {
-    await api.post('/collection/createCollection', {
+    await api.post('/post/createCollection', {
       name,
     });
 
     setName('');
     setModalVisible(false);
-    loadCollections();
+    getAllCollectionsUser();
   }
 
   // 3. Função para navegar para a tela de detalhes
   function navigateToCollectionDetail(collectionId: any) {
     navigation.navigate('CollectionDetail', { collectionId });
   }
+
+  function renderRightActions(collectionId: number) {
+    return (
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => confirmDelete(collectionId)}
+      >
+        <EvilIcons name="trash" size={24} color="white" />
+      </TouchableOpacity>
+    );
+  }
+
+
+  function confirmDelete(collectionId: number) {
+    Alert.alert(
+      'Excluir coleção',
+      'Tem certeza que deseja apagar esta coleção?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Apagar',
+          style: 'destructive',
+          onPress: () => deleteCollection(collectionId),
+        },
+      ]
+    );
+  }
+
+  async function deleteCollection(collectionId: number) {
+    try {
+      await api.delete(`/delete/collection/${collectionId}`);
+      getAllCollectionsUser();
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível apagar a coleção');
+    }
+  }
+
+
 
   return (
     <SafeAreaView style={GlobalStyles.container}>
@@ -49,17 +89,22 @@ export default function Colecao() {
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ padding: 16 }}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.card}
-            onPress={() =>
-              navigation.navigate('ItensColecao', {
-                collectionName: item.name,
-                collectionId: item.id,
-              })
-            }
+          <Swipeable
+            renderRightActions={() => renderRightActions(item.id)}
           >
-            <Text style={styles.cardTitle}>{item.name}</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                navigation.navigate('ItensColecao', {
+                  collectionName: item.name,
+                  collectionId: item.id,
+                })
+              }
+            >
+              <Text style={styles.cardTitle}>{item.name}</Text>
+            </TouchableOpacity>
+          </Swipeable>
+
         )}
 
       />

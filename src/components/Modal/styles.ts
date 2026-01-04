@@ -13,6 +13,12 @@ export default StyleSheet.create({
     color: '#C4C4C4',
   },
 
+  buttons: {
+    height: '10%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   flatList: {
     width: '100%',
   },
@@ -102,6 +108,10 @@ export default StyleSheet.create({
     height: '80%',
     backgroundColor: '#fff',
     borderRadius: 16,
+  },
+
+  modalDados: {
+    height: '90%',
   },
 
   modalImage: {

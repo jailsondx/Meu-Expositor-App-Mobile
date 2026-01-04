@@ -14,10 +14,22 @@ export default StyleSheet.create({
   },
 
   flatList: {
-    width: '100%',
+    width: '100%'
   },
 
-  card: {
+  cardLarge: {
+    flexDirection: 'row',
+    backgroundColor: '#FFF',
+    borderRadius: 12,
+    marginBottom: 16,
+    elevation: 4, // Android
+    shadowColor: '#000', // iOS
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+  },
+
+  cardMinor: {
     flexDirection: 'row',
     backgroundColor: '#FFF',
     height: 70,
@@ -30,7 +42,17 @@ export default StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
   },
 
-  imageContainer: {
+  imageContainerLarge: {
+    width: 90,
+    height: 120,
+    backgroundColor: '#E5E5E5',
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  imageContainerMinor: {
     width: 90,
     height: '100%',
     backgroundColor: '#E5E5E5',
@@ -53,26 +75,31 @@ export default StyleSheet.create({
   },
 
 
-  info: {
+  infoLarger: {
     flex: 1,
-    padding: 5,
+    padding: 12,
+  },
+
+  infoMinor: {
+    flex: 1,
+    padding: 3,
   },
 
   name: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#222',
   },
 
   line: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#555',
     marginTop: 2,
   },
 
   brand: {
     fontSize: 13,
-    color: '#555',
+    color: '#888',
     marginTop: 2,
   },
 
@@ -97,35 +124,70 @@ export default StyleSheet.create({
 
 
   //MODAL
+  collectionItem: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#003566',
+    color: 'whitesmoke',
+    height: 40,
+    fontSize: 26,
+    borderRadius: 6,
+    marginBottom: 16,
+    elevation: 4, // Android
+    shadowColor: '#000', // iOS
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+  },
+
+    collectionItemText: {
+    color: 'whitesmoke',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+
   modalCard: {
     width: '90%',
-    height: '80%',
+    height: '75%',
     backgroundColor: '#fff',
     borderRadius: 16,
+    padding: 16,
   },
 
   modalImage: {
     width: '100%',
-    height: '60%',
+    height: '40%',
     boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
     borderRadius: 12,
     marginBottom: 12,
   },
 
   modalName: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
   },
 
-  modalInfor: {
+  modalLine: {
     fontSize: 16,
     color: '#666',
+  },
+
+  modalBrand: {
+    fontSize: 16,
+    marginBottom: 8,
+    color: '#666'
+  },
+
+  modalPrice: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 8,
   },
 
   modalYear: {
     fontSize: 14,
     color: '#666',
-    marginTop: 16,
     marginBottom: 16,
   },
 
@@ -134,5 +196,4 @@ export default StyleSheet.create({
     marginTop: 12,
     color: '#999',
   },
-
 });

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList, Image, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Image, Modal, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
@@ -8,7 +8,9 @@ import { SearchBar } from '../../components/SearchBar';
 
 //styles
 import styles from './styles';
-import GlobalStyles from '../../GlobalStyles';
+import FlatListStyles from '../../Styles/FlatListStyles';
+import GlobalStyles from '../../Styles/GlobalStyles';
+import { FigureModal } from '../../components/Modal/FigureModal';
 
 export default function Figures({ navigation }: any) {
   const [listFigures, setListFigures] = useState<any[]>([]);
@@ -17,40 +19,81 @@ export default function Figures({ navigation }: any) {
 
   //STATES DAS FIGURES EM RELAÇÃO A COLEÇÃO
   const [collections, setCollections] = useState<any[]>([]);
+  const [collectionName, setCollectionName] = useState<string[]>([]);
   const [isInCollection, setIsInCollection] = useState(false);
   const [collectionPickerVisible, setCollectionPickerVisible] = useState(false);
 
 
   useEffect(() => {
-    loadAll();
+    getRecentFigures();
   }, []);
 
-  async function loadAll() {
+
+  //OBTEM AS FIGURES RECENTES ADD
+  //QUANITDADE DEVE SER AJUSTADA NA FUNÇÃO DO BACKEND
+  async function getRecentFigures() {
     try {
       const response = await api.get('/get/RecentFigures');
+      if (!response.data.success) {
+        Alert.alert('Error', response.data.message);
+        return;
+      }
+
       setListFigures(response.data.data);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || 'Erro de conexão com o servidor';
+      Alert.alert('Error', message);
     }
   }
 
+
+  //OBTEM AS COLEÇÕES DO USUARIO
   async function openCollectionPicker() {
-    const response = await api.get('/collection/loadCollections');
-    setCollections(response.data.data);
-    setCollectionPickerVisible(true);
+    try {
+      const response = await api.get('/get/getAllCollectionsUser');
+
+      if (!response.data.success) {
+        Alert.alert('Error', response.data.message);
+        return;
+      }
+
+      setCollections(response.data.data);
+      setCollectionPickerVisible(true);
+
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || 'Erro de conexão com o servidor';
+      Alert.alert('Error', message);
+    }
   }
 
+  //ADICIONA FIGURE A COLEÇÃO
   async function addToCollection(collectionId: number) {
-    await api.post(`/collection/${collectionId}/add-figure`, {
-      figureId: selectedFigure.id,
-    });
+    try {
+      const response = await api.post(`/post/${collectionId}/add-figure`, {
+        figureId: selectedFigure.id,
+      });
 
-    setCollectionPickerVisible(false);
-    setIsInCollection(true);
+      if (!response.data.success) {
+        Alert.alert('Error', response.data.message);
+        return;
+      }
+
+      setCollectionPickerVisible(false);
+      setIsInCollection(true);
+      setModalVisible(false);
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || 'Erro de conexão com o servidor';
+
+      Alert.alert('Error', message);
+    }
   }
+
 
   async function removeFigure() {
-    await api.delete(`/collection/remove-figure/${selectedFigure.id}`);
+    await api.delete(`/delete/remove-figure/${selectedFigure.id}`);
     setIsInCollection(false);
   }
 
@@ -58,11 +101,16 @@ export default function Figures({ navigation }: any) {
   async function openFigure(figure: any) {
     setSelectedFigure(figure);
     setModalVisible(true);
-    const response = await api.get(`/collection/figure-status`, {
-        params: { figureId: figure.id },
-      });
+    const response = await api.get(`/get/figureStatus`, {
+      params: { figureId: figure.id },
+    });
 
-    setIsInCollection(response.data.data.length > 0);
+    const collections = response.data.data.map(
+      (item: any) => item.collection_name
+    );
+
+    setCollectionName(collections);
+    setIsInCollection(collections.length > 0);
   }
 
   function closeModal() {
@@ -74,7 +122,7 @@ export default function Figures({ navigation }: any) {
   return (
     <SafeAreaView style={GlobalStyles.container}>
       <View style={GlobalStyles.header}>
-        <Text style={styles.title}>Lista de Figures</Text>
+        <Text style={FlatListStyles.title}>Lista de Figures</Text>
       </View>
 
       <SearchBar
@@ -83,32 +131,31 @@ export default function Figures({ navigation }: any) {
       />
 
       <FlatList
-        style={styles.flatList}
+        style={FlatListStyles.flatList}
         data={listFigures}
         keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={{ padding: 16 }}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={styles.card}
+            style={FlatListStyles.cardLarge}
             activeOpacity={0.8}
             onPress={() => openFigure(item)}
           >
 
-            <View style={styles.imageContainer}>
+            <View style={FlatListStyles.imageContainerLarge}>
               <Image
                 source={{ uri: item.image_url }}
-                style={styles.image}
+                style={FlatListStyles.image}
                 resizeMode="cover"
               />
             </View>
 
-            <View style={styles.info}>
-              <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.line}>{item.line_name}</Text>
-              <Text style={styles.brand}>{item.brand_name}</Text>
+            <View style={FlatListStyles.infoLarger}>
+              <Text style={FlatListStyles.name}>{item.name}</Text>
+              <Text style={FlatListStyles.line}>{item.line_name}</Text>
+              <Text style={FlatListStyles.brand}>{item.brand_name}</Text>
 
-              <View style={styles.footer}>
-                <Text style={styles.year}>{item.release_year}</Text>
+              <View style={FlatListStyles.footer}>
+                <Text style={FlatListStyles.year}>{item.release_year}</Text>
               </View>
             </View>
 
@@ -116,95 +163,76 @@ export default function Figures({ navigation }: any) {
         )}
       />
 
-
-      <Modal
+      {/* Modal reutilizável */}
+      <FigureModal
         visible={modalVisible}
-        animationType="slide"
-        transparent
-        onRequestClose={closeModal}
+        figure={selectedFigure}
+        onClose={closeModal}
       >
-        <View style={GlobalStyles.modalOverlay}>
-          <View style={styles.modalCard}>
-            {selectedFigure && (
-              <>
-                <Image
-                  source={{ uri: selectedFigure.image_url }}
-                  style={styles.modalImage}
-                  resizeMode="cover"
-                />
-
-                <Text style={styles.modalName}>{selectedFigure.name}</Text>
-                <Text style={styles.modalLine}>{selectedFigure.line_name}</Text>
-                <Text style={styles.modalBrand}>{selectedFigure.brand_name}</Text>
-
-                <Text style={styles.modalPrice}>
-                  {(selectedFigure.price / 1000).toFixed(3)} {selectedFigure.coin}
-                </Text>
-
-                <Text style={styles.modalYear}>
-                  Lançamento: {selectedFigure.release_year}
-                </Text>
-
-                <TouchableOpacity
-                  style={[
-                    GlobalStyles.buttonPrimary,
-                    isInCollection && { backgroundColor: '#c0392b' },
-                  ]}
-                  onPress={() => {
-                    if (isInCollection) {
-                      removeFigure();
-                    } else {
-                      openCollectionPicker();
-                    }
-                  }}
-                >
-                  <Text style={GlobalStyles.buttonPrimaryText}>
-                    {isInCollection ? 'Remover da Coleção' : 'Adicionar à Coleção'}
-                  </Text>
-                </TouchableOpacity>
+        {/*AQUI ABAIXO FICA COMO O CSS buttons NO STYLE DO COMPONENT FIGURE MODAL*/}
+        <Text style={styles.subtitle}>
+          Suas Coleções: {collectionName.join(', ')}
+        </Text>
 
 
-                <TouchableOpacity onPress={closeModal}>
-                  <Text style={styles.modalClose}>Fechar</Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
+        <View style={GlobalStyles.modalButtons}>
+          <TouchableOpacity
+            style={GlobalStyles.modalButtonPrimary}
+            onPress={() => { openCollectionPicker(); }}
+          >
+            <Text style={GlobalStyles.buttonTextSmall}>
+              Adicionar à Coleção
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={GlobalStyles.modalButtonRemove}
+            onPress={() => { removeFigure(); }}
+          >
+            <Text style={GlobalStyles.buttonTextSmall}>
+              Remover da Coleção
+            </Text>
+          </TouchableOpacity>
         </View>
-      </Modal>
+      </FigureModal>
 
 
+
+      {/*MODAL DE ESCOLHER A COLEÇÃO PARA ADICIONAR A FIGURE*/}
       <Modal visible={collectionPickerVisible} transparent animationType="fade">
         <View style={GlobalStyles.modalOverlay}>
-          <View style={GlobalStyles.modalCardAuto}>
+          <View style={GlobalStyles.modalCardMinor}>
             <View style={GlobalStyles.cardModalTitle}>
               <Text style={GlobalStyles.modalTitle}>Escolha uma coleção</Text>
             </View>
+            <TouchableOpacity
+              style={GlobalStyles.modalCloseButton}
+              onPress={() => setCollectionPickerVisible(false)}
+              activeOpacity={0.7}
+            >
+              <Text style={GlobalStyles.modalCloseButtonText}>×</Text>
+            </TouchableOpacity>
 
 
             <View style={GlobalStyles.modalContent}>
               <FlatList
+                style={FlatListStyles.flatList}
                 data={collections}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                   <TouchableOpacity
-                    style={styles.collectionItem}
+                    style={FlatListStyles.collectionItem}
                     onPress={() => addToCollection(item.id)}
                   >
-                    <Text style={styles.collectionItemText}>{item.name}</Text>
+                    <Text style={FlatListStyles.collectionItemText}>{item.name}</Text>
                   </TouchableOpacity>
                 )}
               />
-              <TouchableOpacity onPress={() => setCollectionPickerVisible(false)}>
-                <Text style={styles.modalClose}>Cancelar</Text>
-              </TouchableOpacity>
             </View>
 
           </View>
         </View>
       </Modal>
-
-
 
     </SafeAreaView>
   );
