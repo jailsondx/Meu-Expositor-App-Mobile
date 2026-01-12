@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
+import style from './style';
 import Home from '../screens/Home/Home';
 import Figures from '../screens/Figures/Figures';
 import ColecaoStack from './ColecaoStack';
@@ -10,9 +11,10 @@ const Tab = createBottomTabNavigator();
 export default function AppRoutes() {
   return (
     <Tab.Navigator
+
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarStyle: { height: 100 },
+        tabBarStyle: style.tabBar,
         tabBarIcon: ({ color, size, focused }) => {
           let iconName: any = 'home';
 
@@ -26,8 +28,8 @@ export default function AppRoutes() {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#000',
-        tabBarInactiveTintColor: '#999',
+        tabBarActiveTintColor: '#E8EBF0',
+        tabBarInactiveTintColor: '#6B7280',
       })}
     >
       <Tab.Screen name="Inicio" component={Home} />

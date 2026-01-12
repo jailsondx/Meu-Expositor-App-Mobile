@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity, FlatList, Image, Modal, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
+import FigureItem from './FigureItem';
 import { api } from '../../services/api';
 
 //componentes
@@ -27,6 +29,14 @@ export default function Figures({ navigation }: any) {
   useEffect(() => {
     getRecentFigures();
   }, []);
+
+
+  const renderItem = useCallback(
+    ({ item }: { item: any }) => (
+      <FigureItem item={item} onPress={openFigure} />
+    ),
+    []
+  );
 
 
   //OBTEM AS FIGURES RECENTES ADD
@@ -98,10 +108,11 @@ export default function Figures({ navigation }: any) {
   }
 
 
-  async function openFigure(figure: any) {
+  const openFigure = useCallback(async (figure: any) => {
     setSelectedFigure(figure);
     setModalVisible(true);
-    const response = await api.get(`/get/figureStatus`, {
+
+    const response = await api.get('/get/figureStatus', {
       params: { figureId: figure.id },
     });
 
@@ -111,7 +122,8 @@ export default function Figures({ navigation }: any) {
 
     setCollectionName(collections);
     setIsInCollection(collections.length > 0);
-  }
+  }, []);
+
 
   function closeModal() {
     setModalVisible(false);
@@ -121,47 +133,32 @@ export default function Figures({ navigation }: any) {
 
   return (
     <SafeAreaView style={GlobalStyles.container}>
-      <View style={GlobalStyles.header}>
-        <Text style={FlatListStyles.title}>Lista de Figures</Text>
+      <View>
+        <View style={GlobalStyles.header}>
+          <Text style={FlatListStyles.title}>Lista de Figures</Text>
+        </View>
+
+        <SearchBar
+          url={'/post/SearchFigures'}
+          onResults={setListFigures}
+        />
+
       </View>
 
-      <SearchBar
-        url={'/post/SearchFigures'}
-        onResults={setListFigures}
-      />
+      <View>
+        <FlatList
+          style={FlatListStyles.flatList}
+          data={listFigures}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={5}
+          removeClippedSubviews
+        />
+      </View>
 
-      <FlatList
-        style={FlatListStyles.flatList}
-        data={listFigures}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={FlatListStyles.cardLarge}
-            activeOpacity={0.8}
-            onPress={() => openFigure(item)}
-          >
 
-            <View style={FlatListStyles.imageContainerLarge}>
-              <Image
-                source={{ uri: item.image_url }}
-                style={FlatListStyles.image}
-                resizeMode="cover"
-              />
-            </View>
-
-            <View style={FlatListStyles.infoLarger}>
-              <Text style={FlatListStyles.name}>{item.name}</Text>
-              <Text style={FlatListStyles.line}>{item.line_name}</Text>
-              <Text style={FlatListStyles.brand}>{item.brand_name}</Text>
-
-              <View style={FlatListStyles.footer}>
-                <Text style={FlatListStyles.year}>{item.release_year}</Text>
-              </View>
-            </View>
-
-          </TouchableOpacity>
-        )}
-      />
 
       {/* Modal reutilizável */}
       <FigureModal
@@ -177,20 +174,20 @@ export default function Figures({ navigation }: any) {
 
         <View style={GlobalStyles.modalButtons}>
           <TouchableOpacity
-            style={GlobalStyles.modalButtonPrimary}
-            onPress={() => { openCollectionPicker(); }}
-          >
-            <Text style={GlobalStyles.buttonTextSmall}>
-              Adicionar à Coleção
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
             style={GlobalStyles.modalButtonRemove}
             onPress={() => { removeFigure(); }}
           >
             <Text style={GlobalStyles.buttonTextSmall}>
               Remover da Coleção
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={GlobalStyles.modalButtonPrimary}
+            onPress={() => { openCollectionPicker(); }}
+          >
+            <Text style={GlobalStyles.buttonTextSmall}>
+              Adicionar à Coleção
             </Text>
           </TouchableOpacity>
         </View>
@@ -213,7 +210,6 @@ export default function Figures({ navigation }: any) {
               <Text style={GlobalStyles.modalCloseButtonText}>×</Text>
             </TouchableOpacity>
 
-
             <View style={GlobalStyles.modalContent}>
               <FlatList
                 style={FlatListStyles.flatList}
@@ -221,10 +217,10 @@ export default function Figures({ navigation }: any) {
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                   <TouchableOpacity
-                    style={FlatListStyles.collectionItem}
+                    style={GlobalStyles.buttonPrimary}
                     onPress={() => addToCollection(item.id)}
                   >
-                    <Text style={FlatListStyles.collectionItemText}>{item.name}</Text>
+                    <Text style={GlobalStyles.buttonPrimaryText}>{item.name}</Text>
                   </TouchableOpacity>
                 )}
               />

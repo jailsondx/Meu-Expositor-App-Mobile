@@ -14,29 +14,39 @@ export default StyleSheet.create({
     gap: 8,
   },
 
-  text: {
-    color: 'whitesmoke',
-  },
-
   input: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: '#E8EBF0',
+    color: '#11151C',
     borderRadius: 8,
     paddingHorizontal: 12,
     height: 44,
     borderWidth: 1,
-    borderColor: '#DDD',
+    borderColor: '#0040AA',
+  },
+
+  viewSelect: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+
+
+  select: {
+    color: '#E8EBF0',
+    backgroundColor: '#262d47',
+    width: '45%',
+    borderRadius: 160
   },
 
   button: {
-    backgroundColor: '#2E86DE',
+    backgroundColor: '#0040AA',
     paddingHorizontal: 16,
     borderRadius: 8,
     justifyContent: 'center',
   },
 
   buttonText: {
-    color: '#FFF',
+    color: '#E8EBF0',
     fontWeight: 'bold',
   },
 });

@@ -2,24 +2,29 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   title: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#E8EBF0',
   },
 
   subtitle: {
     marginTop: 8,
     fontSize: 14,
-    color: '#C4C4C4',
+    color: '#9CA3AF',
+  },
+
+  viewFlatList: {
+    backgroundColor: 'purple',
   },
 
   flatList: {
-    width: '100%'
+    height: '80%',
+    width: '100%',
   },
 
   cardLarge: {
     flexDirection: 'row',
-    backgroundColor: '#FFF',
+    backgroundColor: '#262d47',
     borderRadius: 12,
     marginBottom: 16,
     elevation: 4, // Android
@@ -31,7 +36,7 @@ export default StyleSheet.create({
 
   cardMinor: {
     flexDirection: 'row',
-    backgroundColor: '#FFF',
+    backgroundColor: '#262d47',
     height: 70,
     borderRadius: 12,
     marginBottom: 16,
@@ -86,20 +91,20 @@ export default StyleSheet.create({
   },
 
   name: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
-    color: '#222',
+    color: '#E8EBF0',
   },
 
   line: {
-    fontSize: 14,
-    color: '#555',
+    fontSize: 12,
+    color: '#9CA3AF',
     marginTop: 2,
   },
 
   brand: {
-    fontSize: 13,
-    color: '#888',
+    fontSize: 12,
+    color: '#9CA3AF',
     marginTop: 2,
   },
 
@@ -118,35 +123,12 @@ export default StyleSheet.create({
 
   year: {
     fontSize: 12,
-    color: '#999',
+    color: '#6B7280',
   },
 
 
 
   //MODAL
-  collectionItem: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#003566',
-    color: 'whitesmoke',
-    height: 40,
-    fontSize: 26,
-    borderRadius: 6,
-    marginBottom: 16,
-    elevation: 4, // Android
-    shadowColor: '#000', // iOS
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 3 },
-  },
-
-    collectionItemText: {
-    color: 'whitesmoke',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-
   modalCard: {
     width: '90%',
     height: '75%',

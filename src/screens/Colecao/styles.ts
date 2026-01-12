@@ -21,17 +21,17 @@ export default StyleSheet.create({
   /* ===== LISTA ===== */
 
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#262d47',
     color: '#222',
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 100,
+    padding: 10,
     marginBottom: 12,
   },
 
   cardTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#222',
+    color: '#E8EBF0',
   },
 
   /* ===== FAB ===== */
@@ -43,7 +43,7 @@ export default StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#4F46E5',
+    backgroundColor: '#0040AA',
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 6, // Android shadow
@@ -66,9 +66,11 @@ export default StyleSheet.create({
 
   modalContent: {
     width: '85%',
-    backgroundColor: '#121212',
+    backgroundColor: '#2B2B2B',
     borderRadius: 16,
     padding: 20,
+    borderColor: '#0040AA',
+    borderWidth: 2
   },
 
   modalTitle: {
@@ -80,11 +82,11 @@ export default StyleSheet.create({
   },
 
   input: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: '#E8EBF0',
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 12,
-    color: '#FFF',
+    color: '#11151C',
     marginBottom: 16,
   },
 
@@ -99,20 +101,24 @@ export default StyleSheet.create({
 
 
 
+  viewFlatItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
 
-
-  flatList: {
-    width: '100%',
+   flatItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20
   },
 
   imageContainer: {
-    width: 90,
-    height: '100%',
+    width: 50,
+    height: 50,
+    borderRadius: 50,           // Metade da largura/altura
+    overflow: 'hidden',         // ← Essencial! Corta a imagem nos cantos
     backgroundColor: '#E5E5E5',
-    borderTopLeftRadius: 12,
-    borderBottomLeftRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 
   imagePlaceholder: {
@@ -169,13 +175,19 @@ export default StyleSheet.create({
     color: '#999',
   },
 
+  viewDeleteButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+
   deleteButton: {
     backgroundColor: '#E53935',
     justifyContent: 'center',
     alignItems: 'center',
+    height: 50,
     width: 50,
-    marginBottom: 12,
-    borderRadius: 10,
+    borderRadius: 50,
   },
 
   deleteText: {
@@ -183,6 +195,32 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
 
+
+
+iconGrid: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  borderRadius: 16,
+  marginVertical: 16,
+  backgroundColor: '#20263bff'
+},
+
+iconOption: {
+  margin: 8,
+  padding: 6,
+  borderRadius: 8,
+},
+
+iconDisabled: {
+  opacity: 0.3, // 🔥 aqui acontece a "desativação"
+},
+
+iconImage: {
+  width: 40,
+  height: 40,
+  resizeMode: 'contain',
+},
 
 
 });

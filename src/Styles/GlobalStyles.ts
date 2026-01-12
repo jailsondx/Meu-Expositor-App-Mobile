@@ -9,6 +9,31 @@
     ~Gold #ffd60a
 
     Background: #000814
+
+
+
+    grokAi
+      Fundo principal (background escuro): #0F1217 ou #11151C
+      Fundo de cartões/elevação média: #1A1F27
+      Fundo de cartões mais claros/ativo: #232A34
+      Azul principal (botões, destaques, acentos): #0066FF
+      Azul mais claro (hover/ativo): #1A80FF
+      Azul escuro (detalhes secundários): #0040AA
+      Texto principal (branco): #F8F9FA ou #E8EBF0
+      Texto secundário/cinza claro: #9CA3AF
+      Texto terciário/cinza mais escuro: #6B7280
+      Detalhes roxos/azulados sutis (alguns ícones): #7C3AED ou #6366F1
+
+
+
+      NOVO
+      Fundo principal: #11151C
+      Fundo Secundario (Modal): #20263bff
+      Cor dos itens da Flat Lista: #262d47
+      Texto principal (branco): #E8EBF0
+      Texto secundário/cinza claro: #9CA3AF
+      Texto terciário/cinza mais escuro: #6B7280
+      Azul escuro (detalhes e icones): #003566
  */
 
 import { StyleSheet } from 'react-native';
@@ -16,7 +41,7 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#01161e',
+    backgroundColor: '#11151C',
     color: 'whitesmoke',
     justifyContent: 'space-between',
     paddingTop: 24,   // Padding no topo
@@ -50,12 +75,20 @@ export default StyleSheet.create({
   },
 
   buttonPrimary: {
-    width: '100%',
-    backgroundColor: '#003566',
-    paddingVertical: 14,
-    borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
+    backgroundColor: '#003566',
+    color: 'whitesmoke',
+    height: 50,
+    fontSize: 26,
+    borderRadius: 6,
+    marginBottom: 16,
+    elevation: 4, // Android
+    shadowColor: '#000', // iOS
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
   },
 
   modalButtonPrimary: {
@@ -123,8 +156,8 @@ export default StyleSheet.create({
 
   modalCardMinor: {
     width: '80%',
-    height: '40%',
-    backgroundColor: '#001d3d',
+    height: 'auto',
+    backgroundColor: '#262d47',
     borderRadius: 16,
   },
 

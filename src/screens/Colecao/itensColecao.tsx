@@ -1,5 +1,7 @@
 import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
+import CollectionFigureItem from './CollectionFigureItem';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { api } from '../../services/api';
 import { RouteProp, useRoute } from '@react-navigation/native';
@@ -34,6 +36,7 @@ export default function ItensColecao() {
     }
   }, [collectionId]);
 
+
   async function getAllCollectionsUser() {
     try {
       const response = await api.get('/get/getCollectionById', {
@@ -51,56 +54,56 @@ export default function ItensColecao() {
     //setIsInCollection(false);
   }
 
-  function openFigure(figure: any) {
+  const openFigure = useCallback((figure: any) => {
     setSelectedFigure(figure);
     setModalVisible(true);
-  }
+  }, []);
+
 
   function closeModal() {
     setModalVisible(false);
     setSelectedFigure(null);
   }
 
+
+  const renderItem = useCallback(
+    ({ item }: { item: any }) => (
+      <CollectionFigureItem item={item} onPress={openFigure} />
+    ),
+    [openFigure]
+  );
+
+
   return (
     <SafeAreaView style={GlobalStyles.container}>
-      <View style={GlobalStyles.header}>
-        <Text style={FlatListStyles.title}>{collectionName || '?Coleção Indefinida?'}</Text>
+      <View>
+        <View style={GlobalStyles.header}>
+          <Text style={FlatListStyles.title}>{collectionName || '?Coleção Indefinida?'}</Text>
+        </View>
+
+        <SearchBar
+          url={'/post/SearchFiguresInCollection'}
+          onResults={setListFigures}
+          collectionId={collectionId}
+        />
       </View>
 
 
-      <SearchBar
-        url={'/get/getCollectionById'}
-        onResults={setListFigures}
-        collectionId={collectionId}
-      />
 
-      <FlatList
-        style={FlatListStyles.flatList}
-        data={listFigures}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={FlatListStyles.cardMinor}
-            activeOpacity={0.8}
-            onPress={() => openFigure(item)}
-          >
-            <View style={FlatListStyles.imageContainerMinor}>
-              <Image
-                source={{ uri: item.image_url }}
-                style={FlatListStyles.image}
-                resizeMode="cover"
-              />
-            </View>
+      <View>
+        <FlatList
+          style={FlatListStyles.flatList}
+          data={listFigures}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={5}
+          removeClippedSubviews
+        />
+      </View>
 
-            <View style={FlatListStyles.infoMinor}>
-              <Text style={FlatListStyles.name}>{item.name}</Text>
-              <Text style={FlatListStyles.line}>{item.line_name}</Text>
-              <Text style={FlatListStyles.line}>{item.brand_name}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
 
-      />
 
       {/* Modal reutilizável */}
       <FigureModal
@@ -108,15 +111,16 @@ export default function ItensColecao() {
         figure={selectedFigure}
         onClose={closeModal}
       >
-        <View>
+
+        <View style={GlobalStyles.modalButtons}>
           <TouchableOpacity
-            style={GlobalStyles.buttonRemove}
+            style={GlobalStyles.modalButtonRemove}
             onPress={() => {
               removeFigure();
               closeModal();
             }}
           >
-            <Text style={GlobalStyles.buttonPrimaryText}>
+            <Text style={GlobalStyles.buttonTextSmall}>
               Remover da Coleção
             </Text>
           </TouchableOpacity>

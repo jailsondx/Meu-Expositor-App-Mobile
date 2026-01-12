@@ -1,20 +1,25 @@
-import { View, Text, TouchableOpacity, FlatList, Modal, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Modal, TextInput, Alert, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
 import { Swipeable } from 'react-native-gesture-handler';
 import { api } from '../../services/api';
 import { useNavigation } from '@react-navigation/native';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
+import { iconMap } from '../../utils/iconMap';
+
 
 // Styles
 import styles from './styles';
 import GlobalStyles from '../../Styles/GlobalStyles';
+import FlatListStyles from '../../Styles/FlatListStyles';
 
 export default function Colecao() {
   const navigation = useNavigation<any>();
   const [collections, setCollections] = useState<any[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState('');
+  const [selectedIcon, setSelectedIcon] = useState<string>('default');
+
 
   useEffect(() => {
     getAllCollectionsUser();
@@ -28,9 +33,11 @@ export default function Colecao() {
   async function createCollection() {
     await api.post('/post/createCollection', {
       name,
+      icon: selectedIcon,
     });
 
     setName('');
+    setSelectedIcon('default');
     setModalVisible(false);
     getAllCollectionsUser();
   }
@@ -42,12 +49,15 @@ export default function Colecao() {
 
   function renderRightActions(collectionId: number) {
     return (
-      <TouchableOpacity
-        style={styles.deleteButton}
-        onPress={() => confirmDelete(collectionId)}
-      >
-        <EvilIcons name="trash" size={24} color="white" />
-      </TouchableOpacity>
+      <View style={styles.viewDeleteButton}>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => confirmDelete(collectionId)}
+        >
+          <EvilIcons name="trash" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+
     );
   }
 
@@ -85,6 +95,7 @@ export default function Colecao() {
       </View>
 
       <FlatList
+        style={FlatListStyles.flatList}
         data={collections}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ padding: 16 }}
@@ -101,7 +112,23 @@ export default function Colecao() {
                 })
               }
             >
-              <Text style={styles.cardTitle}>{item.name}</Text>
+              <View style={styles.viewFlatItem}>
+                <View style={styles.flatItem}>
+                  <View style={styles.imageContainer}>
+                    <Image
+                      source={iconMap[item.icon] || iconMap.default}
+                      style={styles.image}
+                      resizeMode="contain"
+                    />
+                  </View>
+                  <Text style={styles.cardTitle}>{item.name}</Text>
+                </View>
+
+                <View>
+                  <Text style={styles.cardTitle}> <EvilIcons name="arrow-right" size={24} color="#E8EBF0" /> </Text>
+                </View>
+              </View>
+
             </TouchableOpacity>
           </Swipeable>
 
@@ -118,27 +145,63 @@ export default function Colecao() {
 
       {/* MODAL */}
       <Modal visible={modalVisible} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Nova Coleção</Text>
-
-            <TextInput
-              style={styles.input}
-              placeholder="Nome da coleção"
-              value={name}
-              onChangeText={setName}
-            />
+        <View style={GlobalStyles.modalOverlay}>
+          <View style={GlobalStyles.modalCardMinor}>
+            <View style={GlobalStyles.cardModalTitle}>
+              <Text style={GlobalStyles.modalTitle}>Nova Coleção</Text>
+            </View>
 
             <TouchableOpacity
-              style={GlobalStyles.buttonPrimary}
-              onPress={createCollection}
+              style={GlobalStyles.modalCloseButton}
+              onPress={() => setModalVisible(false)}
+              activeOpacity={0.7}
             >
-              <Text style={GlobalStyles.buttonPrimaryText}>Criar</Text>
+              <Text style={GlobalStyles.modalCloseButtonText}>×</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <Text style={styles.cancel}>Cancelar</Text>
-            </TouchableOpacity>
+            <View style={GlobalStyles.modalContent}>
+              <TextInput
+                style={styles.input}
+                placeholder="Nome da coleção"
+                value={name}
+                onChangeText={setName}
+              />
+
+              <TouchableOpacity
+                style={GlobalStyles.buttonPrimary}
+                onPress={createCollection}
+              >
+                <Text style={GlobalStyles.buttonPrimaryText}>Criar</Text>
+              </TouchableOpacity>
+
+
+              <View style={styles.iconGrid}>
+                {Object.keys(iconMap)
+                  .filter(icon => icon !== 'default')
+                  .map((icon) => {
+                    const isSelected = selectedIcon === icon;
+
+                    return (
+                      <TouchableOpacity
+                        key={icon}
+                        style={[
+                          styles.iconOption,
+                          !isSelected && styles.iconDisabled
+                        ]}
+                        onPress={() => setSelectedIcon(icon)}
+                        activeOpacity={0.8}
+                      >
+                        <Image
+                          source={iconMap[icon]}
+                          style={styles.iconImage}
+                        />
+                      </TouchableOpacity>
+                    );
+                  })}
+              </View>
+
+            </View>
+
           </View>
         </View>
       </Modal>

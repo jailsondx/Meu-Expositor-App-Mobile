@@ -11,3 +11,15 @@ export async function getToken() {
 export async function removeToken() {
   await AsyncStorage.removeItem('@token');
 }
+
+export async function setUser(name: string) {
+  await AsyncStorage.setItem('@user', name);
+}
+
+export async function getUser() {
+  return AsyncStorage.getItem('@user');
+}
+
+export async function removeUser() {
+  await AsyncStorage.removeItem('@user');
+}
