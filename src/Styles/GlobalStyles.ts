@@ -80,6 +80,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#003566',
     color: 'whitesmoke',
+    width: '100%',
     height: 50,
     fontSize: 26,
     borderRadius: 6,
@@ -156,7 +157,7 @@ export default StyleSheet.create({
 
   modalCardMinor: {
     width: '80%',
-    height: 'auto',
+    height: '50%',
     backgroundColor: '#262d47',
     borderRadius: 16,
   },

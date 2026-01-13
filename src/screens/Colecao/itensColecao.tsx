@@ -1,4 +1,4 @@
-import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, Alert, FlatList, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useCallback } from 'react';
 import CollectionFigureItem from './CollectionFigureItem';
@@ -49,17 +49,39 @@ export default function ItensColecao() {
     }
   }
 
-  async function removeFigure() {
-    await api.delete(`/delete/remove-figure/${selectedFigure.id}`);
-    //setIsInCollection(false);
+  //REMOVER FIGURE DA COLEÇÃO
+  async function removeToCollection(collectionId: number) {
+    try {
+      const response = await api.delete(`/delete/${collectionId}/removeFigure`, {
+        data: {
+          figureId: selectedFigure.id,
+        },
+      });
+
+      if (!response.data.success) {
+        Alert.alert('Error', response.data.message);
+        return;
+      }
+      // Atualiza a lista localmente, removendo o item
+      setListFigures(prev => prev.filter(f => f.id !== selectedFigure?.id));
+
+      setModalVisible(false);
+      setSelectedFigure(null);
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || 'Erro de conexão com o servidor - Remover da Coleção';
+      Alert.alert('Error', message);
+    }
   }
 
+  //ABRIR MODAL DA FIGURE
   const openFigure = useCallback((figure: any) => {
     setSelectedFigure(figure);
     setModalVisible(true);
   }, []);
 
 
+  //FECHAR O MODAL DA FIGURE
   function closeModal() {
     setModalVisible(false);
     setSelectedFigure(null);
@@ -116,7 +138,7 @@ export default function ItensColecao() {
           <TouchableOpacity
             style={GlobalStyles.modalButtonRemove}
             onPress={() => {
-              removeFigure();
+              removeToCollection(collectionId);
               closeModal();
             }}
           >

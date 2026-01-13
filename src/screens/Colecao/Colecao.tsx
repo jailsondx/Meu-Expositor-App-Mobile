@@ -30,8 +30,8 @@ export default function Colecao() {
     setCollections(response.data.data);
   }
 
-  async function createCollection() {
-    await api.post('/post/createCollection', {
+  async function CreateCollection() {
+    await api.post('/post/CreateCollection', {
       name,
       icon: selectedIcon,
     });
@@ -169,7 +169,7 @@ export default function Colecao() {
 
               <TouchableOpacity
                 style={GlobalStyles.buttonPrimary}
-                onPress={createCollection}
+                onPress={CreateCollection}
               >
                 <Text style={GlobalStyles.buttonPrimaryText}>Criar</Text>
               </TouchableOpacity>

@@ -27,15 +27,18 @@ export default StyleSheet.create({
 
   viewSelect: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    width: '100%',
+    justifyContent: 'space-between',
   },
 
 
   select: {
     color: '#E8EBF0',
     backgroundColor: '#262d47',
-    width: '45%',
-    borderRadius: 160
+    height: 50,
+    width: 150,
+    borderRadius: 8,
+    textAlign: 'center'
   },
 
   button: {

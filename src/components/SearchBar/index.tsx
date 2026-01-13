@@ -1,7 +1,7 @@
 import { View, TextInput, TouchableOpacity, Text, ActivityIndicator, Alert } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Picker } from '@react-native-picker/picker';
 import { api } from '../../services/api';
 import styles from './styles';
 
@@ -13,12 +13,15 @@ interface Option {
 interface SearchBarProps {
   url: string;
   collectionId?: number;
-  onResults: (data: any[]) => void;
+  onResults: (data: any[], params: any) => void;
+  onSearch?: (data: any[], hasMore: boolean) => void;
+  onLoadMore?: () => Promise<any[] | null>;
 }
 
 export function SearchBar({ url, collectionId, onResults }: SearchBarProps) {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
+
 
   // filtros
   const [brands, setBrands] = useState<Option[]>([]);
@@ -26,20 +29,29 @@ export function SearchBar({ url, collectionId, onResults }: SearchBarProps) {
   const [brandId, setBrandId] = useState<number | null>(null);
   const [lineId, setLineId] = useState<number | null>(null);
 
+
+  useEffect(() => {
+    loadFilters();
+  }, []);
+
   // ===== BUSCA =====
   async function handleSearch() {
     try {
       setLoading(true);
 
-      const response = await api.post(url, {
+      const params = {
         search: query,
         collectionId,
         brandId,
         lineId,
-      });
+        page: 1,
+        limit: 20,
+      };
+
+      const response = await api.post(url, params);
 
       // sucesso (HTTP 200)
-      onResults(response.data.data);
+      onResults(response.data.data, params);
 
     } catch (error: any) {
       console.log('Erro na busca:', error);
@@ -72,10 +84,6 @@ export function SearchBar({ url, collectionId, onResults }: SearchBarProps) {
     }
   }
 
-  useEffect(() => {
-    loadFilters();
-  }, []);
-
   return (
     <View style={styles.container}>
       {/* INPUT DE TEXTO */}
@@ -96,37 +104,37 @@ export function SearchBar({ url, collectionId, onResults }: SearchBarProps) {
 
       {/* FILTROS */}
       <View style={styles.viewSelect}>
+
         {/* SELECT MARCA */}
-        <Picker
-          selectedValue={brandId}
-          onValueChange={(value) => setBrandId(value)}
-          style={styles.select}
-        >
-          <Picker.Item label="Marcas" value={null} />
-          {brands.map((brand) => (
-            <Picker.Item
-              key={brand.id}
-              label={brand.name}
-              value={brand.id}
-            />
-          ))}
-        </Picker>
+        <RNPickerSelect
+          onValueChange={setBrandId}
+          value={brandId}
+          placeholder={{ label: 'Marcas', value: null }}
+          items={brands.map(brand => ({
+            label: brand.name,
+            value: brand.id,
+          }))}
+          style={{
+            inputIOS: styles.select,
+            inputAndroid: styles.select,
+          }}
+        />
 
         {/* SELECT LINHA */}
-        <Picker
-          selectedValue={lineId}
-          onValueChange={(value) => setLineId(value)}
-          style={styles.select}
-        >
-          <Picker.Item label="Linhas" value={null} />
-          {lines.map((line) => (
-            <Picker.Item
-              key={line.id}
-              label={line.name}
-              value={line.id}
-            />
-          ))}
-        </Picker>
+        <RNPickerSelect
+          onValueChange={setLineId}
+          value={lineId}
+          placeholder={{ label: 'Linhas', value: null }}
+          items={lines.map(line => ({
+            label: line.name,
+            value: line.id,
+          }))}
+          style={{
+            inputIOS: styles.select,
+            inputAndroid: styles.select,
+          }}
+        />
+
       </View>
     </View>
   );
