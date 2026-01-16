@@ -13,6 +13,7 @@ export default function Welcome({ navigation }: any) {
           style={LogoStyles.imageLogo}
           resizeMode="contain"
         />
+        <Text style={GlobalStyles.title}>MEU EXPOSITOR</Text>
       </View>
 
       <View style={styles.buttons}>

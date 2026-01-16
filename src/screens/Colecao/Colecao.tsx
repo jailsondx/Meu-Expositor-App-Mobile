@@ -42,11 +42,6 @@ export default function Colecao() {
     getAllCollectionsUser();
   }
 
-  // 3. Função para navegar para a tela de detalhes
-  function navigateToCollectionDetail(collectionId: any) {
-    navigation.navigate('CollectionDetail', { collectionId });
-  }
-
   function renderRightActions(collectionId: number) {
     return (
       <View style={styles.viewDeleteButton}>
@@ -60,7 +55,6 @@ export default function Colecao() {
 
     );
   }
-
 
   function confirmDelete(collectionId: number) {
     Alert.alert(
@@ -79,13 +73,20 @@ export default function Colecao() {
 
   async function deleteCollection(collectionId: number) {
     try {
-      await api.delete(`/delete/collection/${collectionId}`);
+      const result = await api.delete(`/delete/${collectionId}/deleteCollection`);
+
+      const data = result.data;
+
+      if(data.success){
+        Alert.alert(data.message);
+      }
+
       getAllCollectionsUser();
+
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível apagar a coleção');
     }
   }
-
 
 
   return (
@@ -107,8 +108,9 @@ export default function Colecao() {
               style={styles.card}
               onPress={() =>
                 navigation.navigate('ItensColecao', {
-                  collectionName: item.name,
                   collectionId: item.id,
+                  collectionName: item.name,
+                  collectionIcon: item.icon,
                 })
               }
             >

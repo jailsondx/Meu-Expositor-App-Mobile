@@ -209,7 +209,7 @@ iconGrid: {
 iconOption: {
   margin: 8,
   padding: 6,
-  borderRadius: 8,
+   
 },
 
 iconDisabled: {
@@ -220,6 +220,7 @@ iconImage: {
   width: 40,
   height: 40,
   resizeMode: 'contain',
+  borderRadius: 100,
 },
 
 

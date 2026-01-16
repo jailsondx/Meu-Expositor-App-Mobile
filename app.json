@@ -1,14 +1,14 @@
 {
   "expo": {
     "name": "Meu Expositor",
-    "slug": "Meu Expositor",
-    "version": "1.0.0",
+    "slug": "meu-expositor",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/icon-ME.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon-ME.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -25,7 +25,13 @@
       "package": "com.anonymous.MeuExpositor"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/icon-ME.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f71175a4-af37-4c4d-a448-02b595909667"
+      }
+    },
+    "owner": "jailsondx"
   }
 }

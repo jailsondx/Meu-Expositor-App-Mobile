@@ -35,6 +35,8 @@ export default StyleSheet.create({
   select: {
     color: '#E8EBF0',
     backgroundColor: '#262d47',
+    borderColor: '#3c4c88',
+    borderWidth: 1,
     height: 50,
     width: 150,
     borderRadius: 8,
@@ -42,7 +44,7 @@ export default StyleSheet.create({
   },
 
   button: {
-    backgroundColor: '#0040AA',
+    backgroundColor: '#003566',
     paddingHorizontal: 16,
     borderRadius: 8,
     justifyContent: 'center',

@@ -29,6 +29,8 @@
       NOVO
       Fundo principal: #11151C
       Fundo Secundario (Modal): #20263bff
+      Primary Button: #003566
+      Remove Button: #c0392b
       Cor dos itens da Flat Lista: #262d47
       Texto principal (branco): #E8EBF0
       Texto secundário/cinza claro: #9CA3AF
@@ -51,7 +53,9 @@ export default StyleSheet.create({
 
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    height: 50,
     paddingLeft: 10,  // Padding à esquerda
     paddingRight: 10,  // Padding à esquerda
     borderBottomWidth: 1,        // Define a largura da borda inferior

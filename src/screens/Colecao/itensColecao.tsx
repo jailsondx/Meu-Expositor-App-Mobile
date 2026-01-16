@@ -1,15 +1,17 @@
-import { View, Text, Alert, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, Alert, FlatList, TouchableOpacity, Image } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useCallback } from 'react';
-import CollectionFigureItem from './CollectionFigureItem';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { api } from '../../services/api';
 import { RouteProp, useRoute } from '@react-navigation/native';
+import { iconMap } from '../../utils/iconMap';
 
 //IMPORT COMPONENTES
 //import FlatList_ItemsMin from '../../components/FlatListItems/FlatList_ItemsMin';
+import CollectionFigureItem from './CollectionFigureItem';
 
 //IMPORT STYLES
+import styles from './styles';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import FlatListStyles from '../../Styles/FlatListStyles';
 import { SearchBar } from '../../components/SearchBar';
@@ -20,34 +22,65 @@ type RouteParams = {
   ItensColecao: {
     collectionId: number;
     collectionName: string;
+    collectionIcon: string;
   };
 };
 
 export default function ItensColecao() {
   const route = useRoute<RouteProp<RouteParams, 'ItensColecao'>>();
-  const { collectionId, collectionName } = route.params;
+  const { collectionId, collectionName, collectionIcon } = route.params;
   const [listFigures, setListFigures] = useState<any[]>([]);
+  const [message, setMessage] = useState<string>('');
   const [selectedFigure, setSelectedFigure] = useState<any | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (collectionId) {
-      getAllCollectionsUser();
+      getCollectionById();
     }
   }, [collectionId]);
 
+  //EXIBIS A LISTA DE FIGURAS OU A MENSSAGEM DE FIGURAS NÃO ENCONTRADAS
+  useEffect(() => {
+    if (listFigures.length === 0) {
+      setMessage('Nenhuma Figure Encontrada');
+    } else {
+      setMessage('');
+    }
+  }, [listFigures]);
 
-  async function getAllCollectionsUser() {
+
+
+  async function getCollectionById() {
     try {
       const response = await api.get('/get/getCollectionById', {
         params: { collectionId },
       });
 
-      setListFigures(response.data.data);
+      const itens = response.data.data;
+      setListFigures(itens);
+
     } catch (error) {
       console.log('Erro ao carregar coleção', error);
     }
   }
+
+
+  function confirmDelete(collectionId: number) {
+    Alert.alert(
+      'Remover item da coleção',
+      'Tem certeza que deseja remover este item da coleção?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Apagar',
+          style: 'destructive',
+          onPress: () => removeToCollection(collectionId),
+        },
+      ]
+    );
+  }
+
 
   //REMOVER FIGURE DA COLEÇÃO
   async function removeToCollection(collectionId: number) {
@@ -100,6 +133,10 @@ export default function ItensColecao() {
     <SafeAreaView style={GlobalStyles.container}>
       <View>
         <View style={GlobalStyles.header}>
+          <Image
+            style={styles.iconImage}
+            source={iconMap[collectionIcon] || iconMap.default}
+          />
           <Text style={FlatListStyles.title}>{collectionName || '?Coleção Indefinida?'}</Text>
         </View>
 
@@ -111,20 +148,19 @@ export default function ItensColecao() {
       </View>
 
 
-
       <View>
         <FlatList
           style={FlatListStyles.flatList}
           data={listFigures}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderItem}
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          removeClippedSubviews
+          ListEmptyComponent={
+            <Text style={styles.title}>
+              {message}
+            </Text>
+          }
         />
       </View>
-
 
 
       {/* Modal reutilizável */}
@@ -138,8 +174,7 @@ export default function ItensColecao() {
           <TouchableOpacity
             style={GlobalStyles.modalButtonRemove}
             onPress={() => {
-              removeToCollection(collectionId);
-              closeModal();
+              confirmDelete(collectionId);
             }}
           >
             <Text style={GlobalStyles.buttonTextSmall}>

@@ -5,6 +5,7 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#E8EBF0',
+    marginLeft: 20
   },
 
   subtitle: {
@@ -25,6 +26,8 @@ export default StyleSheet.create({
   cardLarge: {
     flexDirection: 'row',
     backgroundColor: '#262d47',
+    borderColor: '#3c4c88',
+    borderWidth: 1,
     borderRadius: 12,
     marginBottom: 16,
     elevation: 4, // Android
@@ -37,6 +40,8 @@ export default StyleSheet.create({
   cardMinor: {
     flexDirection: 'row',
     backgroundColor: '#262d47',
+    borderColor: '#3c4c88',
+    borderWidth: 1,
     height: 70,
     borderRadius: 12,
     marginBottom: 16,
